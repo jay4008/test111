@@ -15,7 +15,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import * as axios from 'axios';
 const MeetingRooms = props => {
   const [data, setdata] = useState([]);
-const [dataCheck ,setCheck]= useState(true)
+const [dataCheck ,setCheck]= useState(1)
   const renderItem = ({item, index}) => {
     return (
       <View>
@@ -81,14 +81,12 @@ dataCheck === 1 ? true : (dataCheck === 2 ? true === item.completed :  false ===
           marginVertical: 10,
         }}>
         <RNPickerSelect
-          onValueChange={value => {setCheck(value)
+          onValueChange={value => setCheck(value)
           
-          ;
-          console.log("value",value);
-          
-          }}
+        
+        }
           items={[
-            {label: 'All', value: null},
+            {label: 'All', value: 1},
             {label: 'Completed', value: 2},
             {label: 'Pending', value: 3},
           ]}
