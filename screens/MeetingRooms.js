@@ -1,76 +1,108 @@
-import {View, Text, StyleSheet, TouchableOpacity, Picker} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Picker,
+  Image,
+  FlatList,
+  LogBox,
+} from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {RootState} from '../store';
 import {useSelector, useDispatch} from 'react-redux';
-const MeetingRooms = (props) => {
-    const freeroom = useSelector(
-        (state: RootState) => state.meeting.freeroom,
-      );
-
-    //   totalroom : 20,
-    //   freeroom : 5,
-    //    totalBuilding : 4, 
-    //    totalMeeting : 100,
-    //    goingOn: 10
+import * as axios from 'axios';
+const MeetingRooms = props => {
+  const [data, setdata] = useState([]);
+const [dataCheck ,setCheck]= useState(true)
+  const renderItem = ({item, index}) => {
+    return (
+      <View>
+        {
 
 
-      const totalroom = useSelector(
-        (state: RootState) => state.meeting.totalroom,
-      );
-      const totalBuilding = useSelector(
-        (state: RootState) => state.meeting.totalBuilding,
-      );
-    //   const freeroom = useSelector(
-    //     (state: RootState) => state.meeting.totalMeeting,
-    //   );
+dataCheck === 1 ? true : (dataCheck === 2 ? true === item.completed :  false === item.completed )&&
+          <View style={styles.boxcontainer}>
+            {item.completed !== false && (
+              <Image
+                style={{
+                  height: 15,
+                  width: 15,
+                  resizeMode: 'contain',
+                  position: 'absolute',
+                  right: 15,
+                  top: 15,
+                }}
+                source={require('../image/check.png')}></Image>
+            )}
 
-       const totalMeeting = useSelector(
-        (state: RootState) => state.meeting.totalMeeting,
-      );
+            <Text style={styles.Heading}> {index + 1}</Text>
+            <Text style={styles.norMtxt}>{item.title} </Text>
+            <Text style={styles.norMtxt}>
+              {item.completed === false ? 'Pending' : 'Completed'}{' '}
+            </Text>
+          </View>
+        }
+      </View>
+    );
+  };
+  //
 
-      const goingOn = useSelector(
-        (state: RootState) => state.meeting.goingOn,
-      );
-    
+  const dataCall = () => {
+    axios
+      .get('https://jsonplaceholder.typicode.com/todos')
+      .then(function (response) {
+        console.log(response.data);
+        setdata(response.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    dataCall();
+
+
+
+    LogBox.ignoreAllLogs()
+  }, []);
+
   return (
     <View style={{flex: 1}}>
-        <View style = {{ padding:  10,  borderRadius : 5, borderColor :"silver", borderWidth : 1, marginHorizontal: 10,marginVertical: 10,}}>
-         <RNPickerSelect
-    
-            onValueChange={(value) => console.log(value)}
-            items={[
-                { label: 'Football', value: 'football' },
-                { label: 'Baseball', value: 'baseball' },
-                { label: 'Hockey', value: 'hockey' },
-            ]}
-        />
-        </View>
-      <View style={styles.boxcontainer}>
-        <Text style = {styles.Heading}>Buildings</Text>
-        <Text style = {styles.norMtxt}>Total {totalBuilding}</Text>
-      </View>
-      <View style={styles.boxcontainer}>
-        <Text style = {styles.Heading}>Rooms</Text>
-        <Text  style = {styles.norMtxt}>Total {totalroom}</Text>
-<Text  style = {styles.norMtxt}>Free {freeroom}</Text>
-      </View>
-      <View style={styles.boxcontainer}>
-        <Text style = {styles.Heading}>Meetings</Text>
-        <Text  style = {styles.norMtxt}>total {totalMeeting} today</Text>
-        <Text  style = {styles.norMtxt}>Total {goingOn} Going Now</Text>
-      </View>
-      <TouchableOpacity
-      onPress = {() => props.navigation.navigate('AddAMeeting')}
+      <View
         style={{
-          backgroundColor: '#2B79D6',
-          borderRadius: 10,
           padding: 10,
+          borderRadius: 5,
+          borderColor: 'silver',
+          borderWidth: 1,
           marginHorizontal: 10,
-          marginTop: 10,
+          marginVertical: 10,
         }}>
-        <Text style={{textAlign: 'center', color :"#fff"}}>Add a meeting</Text>
-      </TouchableOpacity>
+        <RNPickerSelect
+          onValueChange={value => {setCheck(value)
+          
+          ;
+          console.log("value",value);
+          
+          }}
+          items={[
+            {label: 'All', value: null},
+            {label: 'Completed', value: 2},
+            {label: 'Pending', value: 3},
+          ]}
+        />
+      </View>
+
+      <FlatList
+        ListHeaderComponent={
+          <Text style={{fontSize: 16, fontWeight: 'bold', margin: 10}}>
+            count {data.length} files
+          </Text>
+        }
+        data={data}
+        renderItem={renderItem}></FlatList>
     </View>
   );
 };
@@ -87,12 +119,12 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginVertical: 5,
   },
-  Heading:{
-      fontSize : 18,
-      color :"#000"
+  Heading: {
+    fontSize: 18,
+    color: '#000',
   },
-  norMtxt :{
-      color :"#647789",
-      fontSize : 15
-  }
+  norMtxt: {
+    color: '#647789',
+    fontSize: 15,
+  },
 });

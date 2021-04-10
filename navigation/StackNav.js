@@ -11,7 +11,10 @@ const Stack = createNativeStackNavigator();
 function MyStack() {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="MeetingRooms" component={MeetingRooms} />
+      <Stack.Screen name="MeetingRooms" component={MeetingRooms}  options = {{
+
+          title :'Person names'
+      }}/>
       <Stack.Screen name="AddAMeeting" component={AddAMeeting} />
       <Stack.Screen name="Free" component={Free} />
     </Stack.Navigator>

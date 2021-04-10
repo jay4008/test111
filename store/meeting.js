@@ -21,28 +21,7 @@ let initialState: meetingState = {
   totalBuilding : 4, 
   totalMeeting : 100,
   goingOn: 10,
-rooms:[
-    {
-        name : "punjab",
-        building : 8, 
-        flor: 2
-    },
-    {
-        name : "tamil nadu",
-        building : 8, 
-        flor: 2
-    }
-    ,{
-        name : "Kaveri",
-        building : 8, 
-        flor: 2
-    }
-    ,{
-        name : "Aryabatt",
-        building : 8, 
-        flor: 2
-    }
-]|[]
+rooms:[]
   // Currency: "",
   // Supplements_id: '',
   // no_of_items_in_cart: 0,

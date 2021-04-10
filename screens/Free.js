@@ -35,6 +35,11 @@ const Free = props => {
       building: 8,
       flor: 2,
     },
+    {
+      name: 'Jay',
+      building: 8,
+      flor: 2,
+    },
   ]);
   
   const rooms = useSelector((state: RootState) => state.meeting.rooms);
@@ -49,7 +54,10 @@ const Free = props => {
     props.navigation.goBack();
   };
   useEffect(() => {
-    if(rooms === undefined)
+
+    console.log("rooms", rooms);
+    
+    if(rooms === undefined || rooms=== 0) 
     setdata();
   }, []);
 
@@ -68,7 +76,7 @@ const Free = props => {
         }}>
         <Text style={{textAlign: 'center'}}> Please select a room</Text>
       </View>
-      { rooms &&
+      { 
         rooms.map((item, index) => (
           <TouchableOpacity onPress={() => setindex(index)}>
             <View
@@ -86,7 +94,6 @@ const Free = props => {
             </View>
           </TouchableOpacity>
         ))}
-
       <TouchableOpacity
         onPress={() => dataSetRedux()}
         style={{
