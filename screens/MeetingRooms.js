@@ -16,32 +16,34 @@ import * as axios from 'axios';
 const MeetingRooms = props => {
   const [data, setdata] = useState([]);
 const [dataCheck ,setCheck]= useState(1)
+
+const RowWiseChild = ({c1,c2}) =>{
+  return(
+    <View style = {{flexDirection :'row', alignItems :'center'}}>
+<Text style={styles.Heading}> {c1}</Text>
+<Text style={styles.norMtxt}> {c2}</Text>
+    </View>
+  )
+}
+
   const renderItem = ({item, index}) => {
     return (
       <View>
         {
-
-
-dataCheck === 1 ? true : (dataCheck === 2 ? true === item.completed :  false === item.completed )&&
           <View style={styles.boxcontainer}>
-            {item.completed !== false && (
-              <Image
-                style={{
-                  height: 15,
-                  width: 15,
-                  resizeMode: 'contain',
-                  position: 'absolute',
-                  right: 15,
-                  top: 15,
-                }}
-                source={require('../image/check.png')}></Image>
-            )}
-
-            <Text style={styles.Heading}> {index + 1}</Text>
-            <Text style={styles.norMtxt}>{item.title} </Text>
-            <Text style={styles.norMtxt}>
-              {item.completed === false ? 'Pending' : 'Completed'}{' '}
-            </Text>
+            <RowWiseChild c1 = {"postId"} c2= {item.postId}/>
+            <RowWiseChild c1 = {"id"} c2= {item.id}/>
+            <RowWiseChild c1 = {"name"} c2= {item.name}/>
+            <RowWiseChild c1 = {"email"} c2= {item.email}/>
+            <RowWiseChild c1 = {"body"} c2= {item.body}/>
+          
+            
+            {/* <Text style={styles.Heading}> {index + 1}</Text> */}
+            {/* <Text style={styles.norMtxt}>postId  :{} </Text>
+            <Text style={styles.norMtxt}>      :{item.id} </Text>
+            <Text style={styles.norMtxt}>    :{item.name} </Text>
+            <Text style={styles.norMtxt}>   :{item.email} </Text>
+            <Text style={styles.norMtxt}>   :{item.body} </Text> */}
           </View>
         }
       </View>
@@ -51,7 +53,7 @@ dataCheck === 1 ? true : (dataCheck === 2 ? true === item.completed :  false ===
 
   const dataCall = () => {
     axios
-      .get('https://jsonplaceholder.typicode.com/todos')
+      .get('https://jsonplaceholder.typicode.com/comments?postId=1')
       .then(function (response) {
         console.log(response.data);
         setdata(response.data);
@@ -71,7 +73,10 @@ dataCheck === 1 ? true : (dataCheck === 2 ? true === item.completed :  false ===
 
   return (
     <View style={{flex: 1}}>
-      <View
+      <TouchableOpacity style = {{padding : 8 , backgroundColor:  "#fff", marginHorizontal: 10,borderRadius : 5, borderColor :'blue', borderWidth : 1}} onPress = {() => [props.navigation.navigate('Number')]}>
+        <Text style = {{textAlign :'center', color :"blue"}}>Check Number</Text>
+      </TouchableOpacity>
+      {/* <View
         style={{
           padding: 10,
           borderRadius: 5,
@@ -91,7 +96,7 @@ dataCheck === 1 ? true : (dataCheck === 2 ? true === item.completed :  false ===
             {label: 'Pending', value: 3},
           ]}
         />
-      </View>
+      </View> */}
 
       <FlatList
         ListHeaderComponent={
@@ -100,7 +105,8 @@ dataCheck === 1 ? true : (dataCheck === 2 ? true === item.completed :  false ===
           </Text>
         }
         data={data}
-        renderItem={renderItem}></FlatList>
+        renderItem={renderItem}
+        ></FlatList>
     </View>
   );
 };
@@ -120,9 +126,11 @@ const styles = StyleSheet.create({
   Heading: {
     fontSize: 18,
     color: '#000',
+    width : 100,
   },
   norMtxt: {
     color: '#647789',
-    fontSize: 15,
+    fontSize: 17,
+    width : "70%"
   },
 });

@@ -5,6 +5,7 @@ import React from 'react';
 import MeetingRooms from '../screens/MeetingRooms';
 import AddAMeeting from '../screens/AddAMeeting';
 import Free from '../screens/Free';
+import Number from '../screens/Number';
 
 const Stack = createNativeStackNavigator();
 
@@ -13,8 +14,9 @@ function MyStack() {
     <Stack.Navigator>
       <Stack.Screen name="MeetingRooms" component={MeetingRooms}  options = {{
 
-          title :'Person names'
+          title :'Total Enties'
       }}/>
+       <Stack.Screen name="Number" component={Number} />
       <Stack.Screen name="AddAMeeting" component={AddAMeeting} />
       <Stack.Screen name="Free" component={Free} />
     </Stack.Navigator>
