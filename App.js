@@ -30,7 +30,6 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 import MyStack from './navigation/StackNav';
-import Number from './screens/Number';
 enableScreens();
 const Section = ({children, title}): Node => {
   const isDarkMode = useColorScheme() === 'dark';

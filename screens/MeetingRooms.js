@@ -7,106 +7,97 @@ import {
   Image,
   FlatList,
   LogBox,
+  Alert,
+  Dimensions,
 } from 'react-native';
-import RNPickerSelect from 'react-native-picker-select';
 import React, {useEffect, useState} from 'react';
-import {RootState} from '../store';
-import {useSelector, useDispatch} from 'react-redux';
-import * as axios from 'axios';
+import ImagePicker from 'react-native-image-crop-picker';
+import UserInfo from './UserInfo';
 const MeetingRooms = props => {
-  const [data, setdata] = useState([]);
-const [dataCheck ,setCheck]= useState(1)
-
-const RowWiseChild = ({c1,c2}) =>{
+  const [filedShow, setFiled] = useState(true);
+  const [data, setdata] = useState({})
+const {height , width} = Dimensions.get('window').width
+const RowChild = ({ch1,ch2})=>{
   return(
-    <View style = {{flexDirection :'row', alignItems :'center'}}>
-<Text style={styles.Heading}> {c1}</Text>
-<Text style={styles.norMtxt}> {c2}</Text>
+    <View style = {{flexDirection: 'row',alignItems :'center'}}>
+    <Text style = {{padding : 5 , width : 150}}>{ch1} </Text> 
+    <Text style = {{padding : 5}}>: {ch2} </Text>
     </View>
+
   )
 }
 
-  const renderItem = ({item, index}) => {
-    return (
-      <View>
-        {
-          <View style={styles.boxcontainer}>
-            <RowWiseChild c1 = {"postId"} c2= {item.postId}/>
-            <RowWiseChild c1 = {"id"} c2= {item.id}/>
-            <RowWiseChild c1 = {"name"} c2= {item.name}/>
-            <RowWiseChild c1 = {"email"} c2= {item.email}/>
-            <RowWiseChild c1 = {"body"} c2= {item.body}/>
+
+
+const opengalllery = () =>{
+
+  ImagePicker.openPicker({
+    width: 300,
+    height: 400,
+    cropping: true
+  }).then(image => {
+    console.log(image);
+  });
+}
+
+
+const openCamera = () =>{
+
+  ImagePicker.openCamera({
+    width: 300,
+    height: 400,
+    cropping: true,
+  }).then(image => {
+    console.log(image);
+  });
+}
+
+
+
+
+const options = () =>{
+
+  Alert.alert(  
+    'Alert Title',  
+    'My Alert Msg',  
+    [  
+        {text: 'Camera', onPress: () => openCamera()},  
+        {  
+            text: 'Gallery',  
+            onPress: () =>opengalllery(),  
           
-            
-            {/* <Text style={styles.Heading}> {index + 1}</Text> */}
-            {/* <Text style={styles.norMtxt}>postId  :{} </Text>
-            <Text style={styles.norMtxt}>      :{item.id} </Text>
-            <Text style={styles.norMtxt}>    :{item.name} </Text>
-            <Text style={styles.norMtxt}>   :{item.email} </Text>
-            <Text style={styles.norMtxt}>   :{item.body} </Text> */}
-          </View>
-        }
-      </View>
-    );
-  };
-  //
-
-  const dataCall = () => {
-    axios
-      .get('https://jsonplaceholder.typicode.com/comments?postId=1')
-      .then(function (response) {
-        console.log(response.data);
-        setdata(response.data);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  };
-
-  useEffect(() => {
-    dataCall();
-
-
-
-    LogBox.ignoreAllLogs()
-  }, []);
+        },  
+        {text: 'Cancel', onPress: () => console.log('OK Pressed')},  
+    ],  
+    {cancelable: false}  
+)  
+}
 
   return (
-    <View style={{flex: 1}}>
-      <TouchableOpacity style = {{padding : 8 , backgroundColor:  "#fff", marginHorizontal: 10,borderRadius : 5, borderColor :'blue', borderWidth : 1}} onPress = {() => [props.navigation.navigate('Number')]}>
-        <Text style = {{textAlign :'center', color :"blue"}}>Check Number</Text>
-      </TouchableOpacity>
-      {/* <View
-        style={{
-          padding: 10,
-          borderRadius: 5,
-          borderColor: 'silver',
-          borderWidth: 1,
-          marginHorizontal: 10,
-          marginVertical: 10,
-        }}>
-        <RNPickerSelect
-          onValueChange={value => setCheck(value)
-          
-        
-        }
-          items={[
-            {label: 'All', value: 1},
-            {label: 'Completed', value: 2},
-            {label: 'Pending', value: 3},
-          ]}
-        />
-      </View> */}
+    <View style={{height :height , width :width, backgroundColor:  "#fff",}}>
+     {
+       filedShow && <UserInfo setdata= {setdata} setShowModal= {setFiled}/>
+     }
+     
+    
 
-      <FlatList
-        ListHeaderComponent={
-          <Text style={{fontSize: 16, fontWeight: 'bold', margin: 10}}>
-            count {data.length} files
-          </Text>
-        }
-        data={data}
-        renderItem={renderItem}
-        ></FlatList>
+ <TouchableOpacity onPress = {() => options()} style = {{padding : 8 , backgroundColor:  "#fff", marginHorizontal: 10,borderRadius : 5, borderColor :'blue', borderWidth : 1}} >
+        <Text style = {{textAlign :'center', color :"blue"}}>Upload Image</Text>
+      </TouchableOpacity>
+    
+      {
+!filedShow &&
+      <View style = {{ marginVertical: 20, backgroundColor:  "#fff",}}>
+
+<RowChild ch1 = {"name"} ch2 = {data.name} />
+<RowChild ch1 = {"Address"} ch2 = {data.Address} />
+<RowChild ch1 = {"City"} ch2 = {data.City} />
+<RowChild ch1 = {"phone"} ch2 = {data.phone} />
+</View>
+    } 
+    <TouchableOpacity onPress = {() => props.navigation.navigate('NextPage', data)} style = {{padding : 8 , backgroundColor:  "#fff", marginHorizontal: 10,borderRadius : 5, borderColor :'blue', borderWidth : 1}} >
+        <Text style = {{textAlign :'center', color :"blue"}}>Submit</Text>
+      </TouchableOpacity>
     </View>
   );
 };
